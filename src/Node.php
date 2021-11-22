@@ -34,6 +34,8 @@ class Node implements \IteratorAggregate
 
     private const RAW_PROPS = ['surface', 'feature', 'id', 'length', 'rlength', 'rcAttr', 'lcAttr', 'posid', 'char_type', 'stat', 'isbest', 'alpha', 'beta', 'prob', 'wcost', 'cost'];
 
+    private array $nodes = [];
+
     public function __construct(
         private FFI\CData $node,
         private \WeakReference $token,
@@ -47,10 +49,16 @@ class Node implements \IteratorAggregate
 
     protected function traverseNode(string $name): ?self
     {
-        // XXX: every time the node is traversed, a new different instance is created
         $this->validateToken();
-        $ptr = $this->node->$name;
-        return $ptr ? new self($ptr, $this->token) : null;
+        if (isset($this->nodes[$name]) && ($node = $this->nodes[$name]->get())) {
+            return $node;
+        }
+        if (!($ptr = $this->node->$name)) {
+            return null;
+        }
+        $node = new self($ptr, $this->token);
+        $this->nodes[$name] = \WeakReference::create($node);
+        return $node;
     }
 
     public function next(): ?self
