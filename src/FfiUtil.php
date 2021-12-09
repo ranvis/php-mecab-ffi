@@ -22,7 +22,7 @@ class FfiUtil
 
     public static function newCString(string $str): FFI\CData
     {
-        if (str_contains($str, '\0')) {
+        if (str_contains($str, "\0")) {
             throw new \InvalidArgumentException('C-string should not contain NUL characters');
         }
         $length = strlen($str);
