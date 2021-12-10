@@ -10,6 +10,8 @@ namespace Ranvis\MeCab;
 
 trait TokenIssuerTrait
 {
+    private ?Token $validToken = null;
+
     private function changeToken(): Token
     {
         return $this->validToken = new Token();

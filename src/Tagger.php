@@ -16,7 +16,6 @@ class Tagger
 
     private Env $env;
     private FFI\CData $tagger;
-    private ?Token $validToken = null;
 
     public function __construct(
         Env|Model $origin,

@@ -15,7 +15,6 @@ class Lattice
     use TokenIssuerTrait;
 
     private FFI\CData $lattice;
-    private ?Token $validToken = null;
     private array $gc = [];
 
     public function __construct(
