@@ -1,0 +1,108 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+namespace Ranvis\MeCab;
+
+if (!isset($_composer_autoload_path)) {
+	$_composer_autoload_path = __DIR__ . '/../autoload.php';
+	if (!is_file($_composer_autoload_path)) {
+		$_composer_autoload_path = __DIR__ . '/../vendor/autoload.php';
+	}
+}
+require_once $_composer_autoload_path;
+
+main($argv);
+
+function main(array $argv): void
+{
+    if (!extension_loaded('ffi')) {
+        errorExit("FFI extension is not loaded.");
+    }
+    if (!in_array(count($argv), [2, 3, 4], true)) {
+        echo "Usage: php $argv[0] outputPath.h [ (MeCabLibPath|-) [ScopeName] ]\n";
+		exit;
+    }
+
+    $outputPath = $argv[1];
+    $mecabPath = $argv[2] ?? null;
+    $scopeName = $argv[3] ?? null;
+    if ($mecabPath === '-') {
+        $mecabPath = null;
+    }
+
+    $envArg = $preloaderArg = [];
+    if ($mecabPath !== null) {
+        $envArg[] = $mecabPath;
+    }
+    if ($scopeName !== null) {
+        if (!preg_match('/\A[\w.:-]+\z/', $scopeName)) {
+            errorExit("Strange scope name was specified: $scopeName");
+        }
+        $preloaderArg[] = $scopeName;
+    }
+
+    try {
+        $env = new Env(...$envArg);
+    } catch (\FFI\Exception $e) {
+        errorExit($e->getMessage());
+    }
+
+	$preloader = $env->getPreloader(...$preloaderArg);
+	if ($outputPath === '-') {
+		echo $preloader;
+	} else {
+		writeFileInteractive($outputPath, $preloader);
+	}
+}
+
+function writeFileInteractive(string $filePath, string $data): void
+{
+    $dirPath = dirname($filePath);
+    if (($tmpPath = tempnam($dirPath, 'tmpMeCab')) === false) {
+        errorExit("Unable to create temporary file.");
+    }
+    file_put_contents($tmpPath, $data);
+    chmod($tmpPath, 0644);
+    while (file_exists($filePath)) {
+        if (!yesNo("Remove existing file '$filePath'?")) {
+            unlink($tmpPath);
+            errorExit("Aborted operation.");
+        }
+        if (!unlink($filePath)) {
+            echo "Cannot remove file: $filePath\n";
+        }
+    }
+    if (!rename($tmpPath, $filePath)) {
+        unlink($tmpPath);
+        errorExit("Cannot write to file: $filePath");
+    }
+    echo "Generated: $filePath\n";
+}
+
+function yesNo(string $msg): bool
+{
+    echo "$msg [yes/no]: ";
+    for (;;) {
+        fflush(STDIN);
+        $input = fgets(STDIN);
+        if ($input === false) {
+            continue;
+        }
+        if (preg_match('/^\s*(?:y|yes)\s*$/i', $input)) {
+            break;
+        }
+        if (preg_match('/^\s*(?:n|no)\s*$/i', $input)) {
+            return false;
+        }
+        echo "Please enter 'yes' or 'no' [yes/no]: ";
+    }
+    return true;
+}
+
+function errorExit(string $msg)
+{
+    fputs(STDERR, "Error: $msg\n");
+    exit(1);
+}

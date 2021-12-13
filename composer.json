@@ -14,6 +14,9 @@
 		"php": ">=8.0.0",
 		"ext-ffi": "*"
 	},
+	"bin": [
+		"bin/gen_mecab_preloader"
+	],
 	"autoload": {
 		"psr-4": {
 			"Ranvis\\MeCab\\": "src/"

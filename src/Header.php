@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Ranvis\MeCab;
 
+const COPYRIGHT = <<<'END'
 /*
 Copyright (c) 2001-2008, Taku Kudo
 Copyright (c) 2004-2008, Nippon Telegraph and Telephone Corporation
@@ -39,9 +40,15 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+END;
 
 class Header
 {
+    public static function getCopyright(): string
+    {
+        return COPYRIGHT;
+    }
+
     public static function get(): string
     {
         /**
