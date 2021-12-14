@@ -52,7 +52,7 @@ class Tagger
 
     public function __destruct()
     {
-        $this->validToken = null;
+        $this->freeToken();
         $this->env->lib()->mecab_destroy($this->tagger);
     }
 

@@ -25,6 +25,7 @@ class Lattice
 
     public function __destruct()
     {
+        $this->freeToken();
         $this->env->lib()->mecab_lattice_destroy($this->lattice);
     }
 
@@ -65,20 +66,12 @@ class Lattice
         return $this->convertNodePp($nodePp);
     }
 
-    protected function getValidToken(): Token
-    {
-        if (($token = $this->validToken) === null) {
-            throw new \RuntimeException('Not available');
-        }
-        return $token;
-    }
-
     protected function convertNodePp(FFI\CData $nodePp): array
     {
-        $token = $this->getValidToken();
+        $token = $this->getValidToken()->wrap();
         $nodes = [];
         for ($i = 0; ($nodeP = $nodePp[$i]); $i++) {
-            $nodes[] = new Node($nodeP, $token->wrap());
+            $nodes[] = new Node($nodeP, $token);
         }
         return $nodes;
     }

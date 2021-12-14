@@ -16,4 +16,17 @@ trait TokenIssuerTrait
     {
         return $this->validToken = new Token();
     }
+
+    private function freeToken(): void
+    {
+        $this->validToken = null;
+    }
+
+    protected function getValidToken(): Token
+    {
+        if (($token = $this->validToken) === null) {
+            throw new \RuntimeException('Not available');
+        }
+        return $token;
+    }
 }
