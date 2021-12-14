@@ -11,7 +11,7 @@ BSD 2-Clause License
 ## Installation
 
 `
-composer.phar require ranvis/mecab:^0.1
+composer.phar require ranvis/mecab:^0.2
 `
 
 (On Windows `cmd` prompt, caret `^` must be either quoted or doubled.)
@@ -59,7 +59,7 @@ Then set `ffi.preload` ini value to point to the file.
 (The header file may have to be regenerated when this library is largely updated.)
 
 Now to see if it works, we use CLI to run the following script.
-Notice that `MeCab\Env` is now instantiated with `MeCab\Env::fromScope()` static method instead of `new`, to take advantage of preloading.
+Notice that `MeCab\Env` is now instantiated with `MeCab\Env::fromScope()` static method instead of `new` operator, to take advantage of preloading.
 
 ```sh
 $ cat <<'END' > preload_test.php
@@ -70,7 +70,6 @@ require_once(__DIR__ . '/vendor/autoload.php');
 use Ranvis\MeCab;
 
 $env = MeCab\Env::fromScope();
-
 var_dump($env->getVersion());
 END
 $ php -d ffi.preload=ffi_preload.d/*.h preload_test.php

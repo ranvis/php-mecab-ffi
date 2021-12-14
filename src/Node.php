@@ -171,7 +171,7 @@ class Node implements \IteratorAggregate
     }
 
     /** word occurrence cost */
-    public function wordCost(): int
+    public function wCost(): int
     {
         return $this->getProperty('wcost');
     }
