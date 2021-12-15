@@ -46,7 +46,7 @@ Loading dynamic library using script via FFI has a small overhead compared with 
 This can be mitigated by using FFI's preload feature.
 With preloading, daemon-like SAPI such as FPM can preprocess initialization of the library and reuse it afterwards.
 
-To make use of this, you need to generate a header file for MeCab once.
+To make use of this, we need to generate a header file for MeCab once.
 Run bundled `gen_mecab_preloader` command with the destination (and MeCab library name/path.)
 
 ```sh

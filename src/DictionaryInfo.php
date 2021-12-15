@@ -4,6 +4,8 @@
  * @license BSD-2-Clause
  */
 
+declare(strict_types=1);
+
 namespace Ranvis\MeCab;
 
 use FFI;
