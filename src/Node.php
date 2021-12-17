@@ -96,6 +96,11 @@ class Node implements \IteratorAggregate
         return FFI::string($this->node->feature);
     }
 
+    public function features(): array
+    {
+        return Util::strGetCsv($this->feature());
+    }
+
     protected function getProperty(string $name): mixed
     {
         $this->validateToken();
