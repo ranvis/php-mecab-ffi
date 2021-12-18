@@ -32,8 +32,6 @@ class Node implements \IteratorAggregate
 {
     use TokenValidatorTrait;
 
-    private const RAW_PROPS = ['surface', 'feature', 'id', 'length', 'rlength', 'rcAttr', 'lcAttr', 'posid', 'char_type', 'stat', 'isbest', 'alpha', 'beta', 'prob', 'wcost', 'cost'];
-
     private array $nodes = [];
 
     public function __construct(
@@ -189,15 +187,15 @@ class Node implements \IteratorAggregate
 
     public function __isset(string $name): bool
     {
-        return in_array($name, self::RAW_PROPS, true);
+        return in_array($name, [
+            'alpha', 'beta', 'char_type', 'cost', 'feature', 'id', 'isbest', 'lcAttr', 'length', 'posid', 'prob', 'rcAttr', 'rlength', 'stat', 'surface', 'wcost',
+        ], true);
     }
 
     public function __get(string $name): string|int|float
     {
-        if (!in_array($name, self::RAW_PROPS, true)) {
-            throw new \InvalidArgumentException('No such property');
-        }
-        if (in_array($name, ['surface', 'feature'], true)) {
+        assert($this->__isset($name));
+        if (in_array($name, ['feature', 'surface'], true)) {
             return $this->$name();
         }
         return $this->getProperty($name);
