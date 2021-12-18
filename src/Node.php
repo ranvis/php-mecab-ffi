@@ -197,7 +197,7 @@ class Node implements \IteratorAggregate
         if (!in_array($name, self::RAW_PROPS, true)) {
             throw new \InvalidArgumentException('No such property');
         }
-        if (!in_array($name, ['surface', 'feature'], true)) {
+        if (in_array($name, ['surface', 'feature'], true)) {
             return $this->$name();
         }
         return $this->getProperty($name);
