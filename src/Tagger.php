@@ -19,20 +19,21 @@ class Tagger
 
     public function __construct(
         Env|Model $origin,
-        array|string $args = '--',
+        array|string $args = [],
     ) {
         if ($origin instanceof Env) {
             $this->env = $origin;
             $lib = $this->env->lib();
             if (!is_array($args)) {
+                // N.B. empty string != no args
                 $tagger = $lib->mecab_new2($args);
             } else {
-                array_unshift($args, 'mecab');
+                array_unshift($args, 'mecab');  // A program name as we have in argv[0].
                 $gc = [];
                 $argsList = FFI::new('char *[' . count($args) . ']');
                 $index = 0;
                 foreach ($args as $arg) {
-                    $argCharP = FfiUtil::newCString($arg);
+                    $argCharP = FfiUtil::newCString((string)$arg);
                     $gc[] = $argCharP;
                     $argsList[$index++] = $argCharP->value;
                 }
@@ -40,11 +41,18 @@ class Tagger
                 unset($gc);
             }
         } else {
-            if ($args !== '--' && $args !== []) {
+            if ($args !== []) {
                 throw new \InvalidArgumentException('Args cannot be specified with Model');
             }
             $this->env = $origin->getEnv();
             $tagger = $this->env->lib()->mecab_model_new_tagger($origin);
+        }
+        if ($tagger === null) {
+            $message = $this->env->lib()->mecab_strerror(null);
+            if ($message === '') {  // https://github.com/taku910/mecab/issues/57
+                $message = 'Could not instantiate Tagger';
+            }
+            throw new \InvalidArgumentException($message);
         }
         $this->tagger = $tagger;
     }
