@@ -19,16 +19,15 @@ class Tagger
 
     public function __construct(
         Env|Model $origin,
-        array|string $args = [],
+        array|string $args = '',
     ) {
         if ($origin instanceof Env) {
             $this->env = $origin;
             $lib = $this->env->lib();
             if (!is_array($args)) {
                 $tagger = $lib->mecab_new2($args);
-            } elseif (!$args) {
-                $tagger = $lib->mecab_new(0, null);
             } else {
+                array_unshift($args, 'mecab');
                 $gc = [];
                 $argsList = FFI::new('char *[' . count($args) . ']');
                 $index = 0;
@@ -41,7 +40,7 @@ class Tagger
                 unset($gc);
             }
         } else {
-            if ($args !== []) {
+            if ($args !== '' && $args !== []) {
                 throw new \InvalidArgumentException('Args cannot be specified with Model');
             }
             $this->env = $origin->getEnv();
@@ -60,7 +59,6 @@ class Tagger
     {
         return $this->env->lib()->mecab_strerror($this->tagger);
     }
-
 
     public function parseLattice(Lattice $lattice): bool
     {
