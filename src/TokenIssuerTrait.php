@@ -12,16 +12,29 @@ trait TokenIssuerTrait
 {
     private ?Token $validToken = null;
 
+    /**
+     * Renew token and free the old one.
+     *
+     * @return Token The new token.
+     */
     private function changeToken(): Token
     {
         return $this->validToken = new Token();
     }
 
+    /**
+     * Free the current token.
+     */
     private function freeToken(): void
     {
         $this->validToken = null;
     }
 
+    /**
+     * Get the current valid token.
+     *
+     * @return Token The current token.
+     */
     protected function getValidToken(): Token
     {
         if (($token = $this->validToken) === null) {

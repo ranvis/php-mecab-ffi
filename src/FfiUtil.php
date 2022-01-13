@@ -12,6 +12,12 @@ use FFI;
 
 class FfiUtil
 {
+    /**
+     * Allocate a memory buffer.
+     *
+     * @param string $buf The buffer contents.
+     * @return FFI\CData The allocated buffer.
+     */
     public static function newBuffer(string $buf): FFI\CData
     {
         $length = strlen($buf);
@@ -20,6 +26,12 @@ class FfiUtil
         return $mem;
     }
 
+    /**
+     * Allocate a C-string buffer.
+     *
+     * @param string $str The string contents.
+     * @return FFI\CData The allocated string (NUL-terminated, in struct { char value[]; }.)
+     */
     public static function newCString(string $str): FFI\CData
     {
         if (str_contains($str, "\0")) {

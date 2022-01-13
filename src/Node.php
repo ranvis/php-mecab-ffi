@@ -105,16 +105,19 @@ class Node implements \IteratorAggregate
         return $this->node->$name;
     }
 
+    /** node identifier */
     public function id(): int
     {
         return $this->getProperty('id');
     }
 
+    /** length of the surface form */
     public function length(): int
     {
         return $this->getProperty('length');
     }
 
+    /** length of the surface form including white space before the morph */
     public function rLength(): int
     {
         return $this->getProperty('rlength');
@@ -138,6 +141,7 @@ class Node implements \IteratorAggregate
         return $this->getProperty('posid');
     }
 
+    /** character type */
     public function charType(): int
     {
         return $this->getProperty('char_type');

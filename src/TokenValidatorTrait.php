@@ -10,6 +10,9 @@ namespace Ranvis\MeCab;
 
 trait TokenValidatorTrait
 {
+    /**
+     * Make sure the token is valid. i.e. It has been allocated and not freed since.
+     */
     protected function validateToken(): void
     {
         if (!$this->token->get()) {

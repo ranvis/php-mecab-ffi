@@ -17,6 +17,13 @@ class Tagger
     private Env $env;
     private FFI\CData $tagger;
 
+    /**
+     * Instantiate Tagger.
+     *
+     * @param Env|Model $origin Env or Model instance that Tagger depends on.
+     * @param array|string $args Option arguments for Env.
+     * This should be the default [] if $origin is Model.
+     */
     public function __construct(
         Env|Model $origin,
         array|string $args = [],
@@ -73,6 +80,12 @@ class Tagger
         return (bool)$this->env->lib()->mecab_parse_lattice($this->tagger, $lattice->getObject());
     }
 
+    /**
+     * Parse string and return into string.
+     *
+     * @param string $str A string to parse.
+     * @return string The result string.
+     */
     public function parse(string $str): string
     {
         $strCharP = FfiUtil::newBuffer($str);
@@ -80,6 +93,12 @@ class Tagger
         return $result;
     }
 
+    /**
+     * Parse string and return head node.
+     *
+     * @param string $str A string to parse.
+     * @return Node The head node of the result.
+     */
     public function parseToNode(string $str): Node
     {
         $token = $this->changeToken();
@@ -88,6 +107,11 @@ class Tagger
         return new Node($this->env->lib()->mecab_sparse_tonode2($this->tagger, $strCharP->value, strlen($str)), $token->wrap());
     }
 
+    /**
+     * Get information of the dictionaries.
+     *
+     * @return DictionaryInfo[] An array of dictionary information.
+     */
     public function getDictionaryInfo(): array
     {
         $list = [];
