@@ -14,15 +14,18 @@ class Env
 {
     private const SCOPE_NAME = 'Ranvis/MeCab/1';
 
+    private string $libPath;
     private FFI $lib;
 
     public function __construct(
-        private false|string $libPath = 'libmecab.' . PHP_SHLIB_SUFFIX,
+        string|null|false $libPath = null,
     ) {
         if ($libPath !== false) {
+            $libPath ??= 'libmecab.' . PHP_SHLIB_SUFFIX;
             $defs = Header::get();
             $this->lib = FFI::cdef($defs, $libPath);
         }
+        $this->libPath = $libPath;
     }
 
     public static function fromScope(string $scope = self::SCOPE_NAME): static
