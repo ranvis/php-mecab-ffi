@@ -6,5 +6,8 @@
 
 declare(strict_types=1);
 
-$loader = require(__DIR__ . '/../vendor/autoload.php');
-$loader->addPsr4('Ranvis\MeCab\\', __DIR__ . '/../src');
+require __DIR__ . '/../vendor/autoload.php';
+
+if (!defined('TEST_LIBMECAB_PATH')) {
+    define('TEST_LIBMECAB_PATH', null);
+}
