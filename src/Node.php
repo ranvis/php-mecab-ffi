@@ -96,7 +96,7 @@ class Node implements \IteratorAggregate
 
     public function features(): array
     {
-        return Util::strGetCsv($this->feature());
+        return Util::strGetCsv($this->feature()) ?? [];
     }
 
     protected function getProperty(string $name): mixed
@@ -168,7 +168,7 @@ class Node implements \IteratorAggregate
     }
 
     /** marginal probability */
-    public function prob(): int
+    public function prob(): float
     {
         return $this->getProperty('prob');
     }
