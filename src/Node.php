@@ -96,7 +96,7 @@ class Node implements \IteratorAggregate
 
     public function features(): array
     {
-        return Util::strGetCsv($this->feature()) ?? [];
+        return Util::fromCsv($this->feature()) ?? [];
     }
 
     protected function getProperty(string $name): mixed
