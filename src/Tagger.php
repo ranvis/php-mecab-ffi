@@ -19,7 +19,7 @@ class Tagger
 
     public function __construct(
         Env|Model $origin,
-        array|string $args = '',
+        array|string $args = '--',
     ) {
         if ($origin instanceof Env) {
             $this->env = $origin;
@@ -40,7 +40,7 @@ class Tagger
                 unset($gc);
             }
         } else {
-            if ($args !== '' && $args !== []) {
+            if ($args !== '--' && $args !== []) {
                 throw new \InvalidArgumentException('Args cannot be specified with Model');
             }
             $this->env = $origin->getEnv();
