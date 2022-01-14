@@ -46,12 +46,16 @@ class Lattice
 
     public function getBosNode(): ?Node
     {
-        return $this->env->lib()->mecab_lattice_get_bos_node($this->lattice);
+        $token = $this->getValidToken()->wrap();
+        $nodeP = $this->env->lib()->mecab_lattice_get_bos_node($this->lattice);
+        return new Node($nodeP, $token);
     }
 
     public function getEosNode(): ?Node
     {
-        return $this->env->lib()->mecab_lattice_get_eos_node($this->lattice);
+        $token = $this->getValidToken()->wrap();
+        $nodeP = $this->env->lib()->mecab_lattice_get_eos_node($this->lattice);
+        return new Node($nodeP, $token);
     }
 
     public function getBeginNodes(): array
