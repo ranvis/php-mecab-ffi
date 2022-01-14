@@ -32,7 +32,7 @@ function main(array $argv): void
         $mecabPath = null;
     }
 
-    $envArg = $preloaderArg = [];
+    $envArg = [];
     if ($mecabPath !== null) {
         $envArg[] = $mecabPath;
     }
@@ -40,7 +40,6 @@ function main(array $argv): void
         if (!preg_match('/\A[\w.:-]+\z/', $scopeName)) {
             errorExit("Strange scope name was specified: $scopeName");
         }
-        $preloaderArg[] = $scopeName;
     }
 
     try {
@@ -49,7 +48,7 @@ function main(array $argv): void
         errorExit($e->getMessage());
     }
 
-	$preloader = $env->getPreloader(...$preloaderArg);
+	$preloader = $env->getPreloader($scopeName);
 	if ($outputPath === '-') {
 		echo $preloader;
 	} else {

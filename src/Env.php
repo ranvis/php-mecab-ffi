@@ -28,8 +28,9 @@ class Env
         $this->libPath = $libPath;
     }
 
-    public static function fromScope(string $scope = self::SCOPE_NAME): static
+    public static function fromScope(?string $scope = null): static
     {
+        $scope ??= self::SCOPE_NAME;
         $instance = new static(false);
         $instance->lib = FFI::scope($scope);
         return $instance;
@@ -45,8 +46,9 @@ class Env
         return $this->lib->mecab_version();
     }
 
-    public function getPreloader(string $scope = self::SCOPE_NAME): string
+    public function getPreloader(?string $scope = null): string
     {
+        $scope ??= self::SCOPE_NAME;
         $scope = <<<"END"
             #define FFI_SCOPE "$scope"
             #define FFI_LIB "$this->libPath"
