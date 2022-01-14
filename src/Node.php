@@ -32,12 +32,15 @@ class Node implements \IteratorAggregate
 {
     use TokenValidatorTrait;
 
+    private \WeakReference $token;
+
     public function __construct(
         private FFI\CData|\stdClass $node,
-        private \WeakReference $token,
+        Token|\WeakReference $token,
         private NodeFactory $factory,
     ) {
         // The node can be a plain object, since mecab_node_t is never passed to the library.
+        $this->token = ($token instanceof Token) ? $token->wrap() : $token;
     }
 
     public function getIterator(): NodeIterator
@@ -51,7 +54,7 @@ class Node implements \IteratorAggregate
         if (!($ptr = $this->node->$name)) {
             return null;
         }
-        return $this->factory->create($ptr, $this->token->get());
+        return $this->factory->create($ptr, $this->token);
     }
 
     public function next(): ?self

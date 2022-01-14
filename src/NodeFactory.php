@@ -18,13 +18,13 @@ class NodeFactory
      * Create a new node or return a node for the node object.
      *
      * @param FFI\CData|\stdClass $nodeP A node object that implements id property.
-     * @param Token $token Token that node depends on.
+     * @param Token|\WeakReference $token Token or its reference that node depends on.
      * @return Node Node instance.
      */
-    public function create(FFI\CData|\stdClass $nodeP, Token $token): Node
+    public function create(FFI\CData|\stdClass $nodeP, Token|\WeakReference $token): Node
     {
         if (!($node = ($this->nodes[$nodeP->id] ?? null)?->get())) {
-            $node = new Node($nodeP, $token->wrap(), $this);
+            $node = new Node($nodeP, $token, $this);
             $this->nodes[$nodeP->id] = \WeakReference::create($node);
         }
         return $node;

@@ -154,7 +154,7 @@ class Lattice
         $node = $this->env->lib()->mecab_lattice_new_node($this->lattice); // owned by lattice
         // XXX: Create new factory but the Node is not bound to it.
         // What is the use case for newNode()?
-        return new Node($node, $this->getValidToken()->wrap(), new NodeFactory());
+        return new Node($node, $this->getValidToken(), new NodeFactory());
     }
 
     public function __toString(): string
