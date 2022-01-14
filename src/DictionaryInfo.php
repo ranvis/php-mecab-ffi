@@ -20,7 +20,7 @@ class DictionaryInfo
     private int $rightAttrsSize;
     private int $version;
 
-    public function __construct(FFI\CData $info)
+    public function __construct(FFI\CData|\stdClass $info)
     {
         $this->fileName = FFI::string($info->filename);
         $this->charset = FFI::string($info->charset);

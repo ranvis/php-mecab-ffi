@@ -16,6 +16,7 @@ class Lattice
 
     private FFI\CData $lattice;
     private array $gc = [];
+    private NodeFactory $factory;
 
     public function __construct(
         private Env $env,
@@ -46,16 +47,16 @@ class Lattice
 
     public function getBosNode(): ?Node
     {
-        $token = $this->getValidToken()->wrap();
+        $token = $this->getValidToken();
         $nodeP = $this->env->lib()->mecab_lattice_get_bos_node($this->lattice);
-        return new Node($nodeP, $token);
+        return $this->factory->create($nodeP, $token);
     }
 
     public function getEosNode(): ?Node
     {
-        $token = $this->getValidToken()->wrap();
+        $token = $this->getValidToken();
         $nodeP = $this->env->lib()->mecab_lattice_get_eos_node($this->lattice);
-        return new Node($nodeP, $token);
+        return $this->factory->create($nodeP, $token);
     }
 
     public function getBeginNodes(): array
@@ -72,10 +73,10 @@ class Lattice
 
     protected function convertNodePp(FFI\CData $nodePp): array
     {
-        $token = $this->getValidToken()->wrap();
+        $token = $this->getValidToken();
         $nodes = [];
         for ($i = 0; ($nodeP = $nodePp[$i]); $i++) {
-            $nodes[] = new Node($nodeP, $token);
+            $nodes[] = $this->factory->create($nodeP, $token);
         }
         return $nodes;
     }
@@ -91,6 +92,7 @@ class Lattice
     public function setSentence(string $str): void
     {
         $this->changeToken();
+        $this->factory = new NodeFactory();
         $this->gc["\0sentence"] = $buf = FfiUtil::newBuffer($str);
         $this->env->lib()->mecab_lattice_set_sentence2($this->lattice, $buf->value, strlen($str));
     }
@@ -150,7 +152,9 @@ class Lattice
     public function newNode(): Node
     {
         $node = $this->env->lib()->mecab_lattice_new_node($this->lattice); // owned by lattice
-        return new Node($node, $this->getValidToken()->wrap());
+        // XXX: Create new factory but the Node is not bound to it.
+        // What is the use case for newNode()?
+        return new Node($node, $this->getValidToken()->wrap(), new NodeFactory());
     }
 
     public function __toString(): string

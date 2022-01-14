@@ -104,7 +104,9 @@ class Tagger
         $token = $this->changeToken();
         $strCharP = FfiUtil::newBuffer($str); // node.surface references this buffer
         $token->addChild($strCharP);
-        return new Node($this->env->lib()->mecab_sparse_tonode2($this->tagger, $strCharP->value, strlen($str)), $token->wrap());
+        $factory = new NodeFactory();
+        $node = $factory->create($this->env->lib()->mecab_sparse_tonode2($this->tagger, $strCharP->value, strlen($str)), $token);
+        return $node;
     }
 
     /**
