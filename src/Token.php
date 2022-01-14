@@ -11,6 +11,7 @@ namespace Ranvis\MeCab;
 class Token
 {
     private array $gc = [];
+    private \WeakReference $wrapped;
 
     /**
      * Wrap the instance in a weak reference.
@@ -19,7 +20,7 @@ class Token
      */
     public function wrap(): \WeakReference
     {
-        return \WeakReference::create($this);
+        return $this->wrapped ??= \WeakReference::create($this);
     }
 
     /**
