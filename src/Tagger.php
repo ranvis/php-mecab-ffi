@@ -42,7 +42,7 @@ class Tagger
                 foreach ($args as $arg) {
                     $argCharP = FfiUtil::newCString((string)$arg);
                     $gc[] = $argCharP;
-                    $argsList[$index++] = $argCharP->value;
+                    $argsList[$index++] = FFI::cast('char *', FFI::addr($argCharP));
                 }
                 $tagger = $lib->mecab_new(count($args), $argsList);
                 unset($gc);
@@ -89,7 +89,7 @@ class Tagger
     public function parse(string $str): string
     {
         $strCharP = FfiUtil::newBuffer($str);
-        $result = $this->env->lib()->mecab_sparse_tostr2($this->tagger, $strCharP->value, strlen($str));
+        $result = $this->env->lib()->mecab_sparse_tostr2($this->tagger, $strCharP, strlen($str));
         return $result;
     }
 
@@ -105,7 +105,7 @@ class Tagger
         $strCharP = FfiUtil::newBuffer($str); // node.surface references this buffer
         $token->addChild($strCharP);
         $factory = new NodeFactory();
-        $node = $factory->create($this->env->lib()->mecab_sparse_tonode2($this->tagger, $strCharP->value, strlen($str)), $token);
+        $node = $factory->create($this->env->lib()->mecab_sparse_tonode2($this->tagger, $strCharP, strlen($str)), $token);
         return $node;
     }
 

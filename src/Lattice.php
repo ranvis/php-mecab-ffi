@@ -94,7 +94,7 @@ class Lattice
         $this->changeToken();
         $this->factory = new NodeFactory();
         $this->gc["\0sentence"] = $buf = FfiUtil::newBuffer($str);
-        $this->env->lib()->mecab_lattice_set_sentence2($this->lattice, $buf->value, strlen($str));
+        $this->env->lib()->mecab_lattice_set_sentence2($this->lattice, $buf, strlen($str));
     }
 
     /** normalization factor of CRF */
@@ -192,7 +192,7 @@ class Lattice
         if (!isset($gc[$feature])) {
             $gc[$feature] = FfiUtil::newCString($feature);
         }
-        $this->env->lib()->mecab_lattice_set_feature_constraint($this->lattice, $start, $end, $gc[$feature]->value);
+        $this->env->lib()->mecab_lattice_set_feature_constraint($this->lattice, $start, $end, $gc[$feature]);
     }
 
     public function getLastError(): string

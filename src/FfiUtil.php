@@ -21,8 +21,8 @@ class FfiUtil
     public static function newBuffer(string $buf): FFI\CData
     {
         $length = strlen($buf);
-        $mem = FFI::new('struct { char value[' . max(1, $length) . ']; }');
-        FFI::memcpy($mem->value, $buf, $length);
+        $mem = FFI::new('char [' . max(1, $length) . ']');
+        FFI::memcpy($mem, $buf, $length);
         return $mem;
     }
 
@@ -30,7 +30,7 @@ class FfiUtil
      * Allocate a C-string buffer.
      *
      * @param string $str The string contents.
-     * @return FFI\CData The allocated string (NUL-terminated, in struct { char value[]; }.)
+     * @return FFI\CData The allocated string (NUL-terminated.)
      */
     public static function newCString(string $str): FFI\CData
     {
@@ -38,9 +38,9 @@ class FfiUtil
             throw new \InvalidArgumentException('C-string should not contain NUL characters');
         }
         $length = strlen($str);
-        $mem = FFI::new('struct { char value[' . ($length + 1) . ']; }');
-        FFI::memcpy($mem->value, $str, $length);
-        $mem->value[$length] = "\0";
+        $mem = FFI::new('char [' . ($length + 1) . ']');
+        FFI::memcpy($mem, $str, $length);
+        $mem[$length] = "\0";
         return $mem;
     }
 }
