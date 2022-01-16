@@ -10,7 +10,6 @@ namespace Ranvis\MeCab;
 
 class NodeIterator implements \Iterator
 {
-    private int $offset = 0;
     private ?Node $current;
 
     public function __construct(
@@ -26,18 +25,16 @@ class NodeIterator implements \Iterator
 
     public function key(): int
     {
-        return $this->offset;
+        return $this->current->id();
     }
 
     public function next(): void
     {
-        $this->offset++;
         $this->current = $this->current->next();
     }
 
     public function rewind(): void
     {
-        $this->offset = 0;
         $this->current = $this->head;
     }
 
