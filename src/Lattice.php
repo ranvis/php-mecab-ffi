@@ -30,6 +30,9 @@ class Lattice
         $this->env->lib()->mecab_lattice_destroy($this->lattice);
     }
 
+    /**
+     * @internal
+     */
     public function getObject(): FFI\CData
     {
         return $this->lattice;
@@ -74,9 +77,12 @@ class Lattice
     protected function convertNodePp(FFI\CData $nodePp): array
     {
         $token = $this->getValidToken();
+        $size = $this->env->lib()->mecab_lattice_get_size($this->lattice) + 4;
         $nodes = [];
-        for ($i = 0; ($nodeP = $nodePp[$i]); $i++) {
-            $nodes[] = $this->factory->create($nodeP, $token);
+        for ($i = 0; $i < $size; $i++) {
+            if (($nodeP = $nodePp[$i]) !== null) {
+                $nodes[$i] = $this->factory->create($nodeP, $token);
+            }
         }
         return $nodes;
     }
@@ -184,15 +190,16 @@ class Lattice
 
     public function getFeatureConstraint(int $position): ?string
     {
-        return $this->env->lib()->mecab_lattice_get_feature_constraint($this->lattice, $position);
+        $feature = $this->env->lib()->mecab_lattice_get_feature_constraint($this->lattice, $position);
+        return $feature !== null ? FFI::string($feature) : null;
     }
 
     public function setFeatureConstraint(int $start, int $end, string $feature): void
     {
-        if (!isset($gc[$feature])) {
-            $gc[$feature] = FfiUtil::newCString($feature);
+        if (!isset($this->gc[$feature])) {
+            $this->gc[$feature] = FfiUtil::newCString($feature);
         }
-        $this->env->lib()->mecab_lattice_set_feature_constraint($this->lattice, $start, $end, $gc[$feature]);
+        $this->env->lib()->mecab_lattice_set_feature_constraint($this->lattice, $start, $end, $this->gc[$feature]);
     }
 
     public function getLastError(): string
