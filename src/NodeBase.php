@@ -41,7 +41,7 @@ abstract class NodeBase implements NodeInterface
         return $this->traverseNode('enext');
     }
 
-    public function nextStart(): ?self
+    public function nextBeginning(): ?self
     {
         return $this->traverseNode('bnext');
     }

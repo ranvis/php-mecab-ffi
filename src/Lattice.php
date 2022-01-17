@@ -62,7 +62,7 @@ class Lattice
         return $this->factory->create($nodeP, $token);
     }
 
-    public function getBeginNodes(): array
+    public function getBeginningNodes(): array
     {
         $nodePp = $this->env->lib()->mecab_lattice_get_all_begin_nodes($this->lattice);
         return $this->convertNodePp($nodePp);
