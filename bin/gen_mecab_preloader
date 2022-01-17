@@ -60,27 +60,27 @@ function writeFileInteractive(string $filePath, string $data): void
 {
     $dirPath = dirname($filePath);
     if (($tmpPath = tempnam($dirPath, 'tmpMeCab')) === false) {
-        errorExit("Unable to create temporary file.");
+        errorExit("Unable to create a temporary file.");
     }
     file_put_contents($tmpPath, $data);
     chmod($tmpPath, 0644);
     while (file_exists($filePath)) {
-        if (!yesNo("Remove existing file '$filePath'?")) {
+        if (!yesNo("Remove the existing file '$filePath'?", false)) {
             unlink($tmpPath);
-            errorExit("Aborted operation.");
+            errorExit("Aborted the operation.");
         }
         if (!unlink($filePath)) {
-            echo "Cannot remove file: $filePath\n";
+            echo "Cannot remove the file: $filePath\n";
         }
     }
     if (!rename($tmpPath, $filePath)) {
         unlink($tmpPath);
-        errorExit("Cannot write to file: $filePath");
+        errorExit("Cannot write to the file: $filePath");
     }
     echo "Generated: $filePath\n";
 }
 
-function yesNo(string $msg): bool
+function yesNo(string $msg, ?bool $default = null): bool
 {
     echo "$msg [yes/no]: ";
     for (;;) {
@@ -89,15 +89,19 @@ function yesNo(string $msg): bool
         if ($input === false) {
             continue;
         }
-        if (preg_match('/^\s*(?:y|yes)\s*$/i', $input)) {
-            break;
+        $input = trim($input);
+        if (preg_match('/^(?:y|yes)$/i', $input)) {
+            return true;
         }
-        if (preg_match('/^\s*(?:n|no)\s*$/i', $input)) {
+        if (preg_match('/^(?:n|no)$/i', $input)) {
             return false;
         }
-        echo "Please enter 'yes' or 'no' [yes/no]: ";
+        if ($default !== null && $input === '') {
+            break;
+        }
+        echo "Please enter 'yes' or 'no': ";
     }
-    return true;
+    return $default;
 }
 
 function errorExit(string $msg)
