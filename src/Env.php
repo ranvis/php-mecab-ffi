@@ -46,6 +46,21 @@ class Env
         return $this->lib->mecab_version();
     }
 
+    public function tagger(array|string $args = []): Tagger
+    {
+        return new Tagger($this, $args);
+    }
+
+    public function model(array|string $args = []): Model
+    {
+        return new Model($this, $args);
+    }
+
+    public function lattice(): Lattice
+    {
+        return new Lattice($this);
+    }
+
     public function getPreloader(?string $scope = null): string
     {
         $scope ??= self::SCOPE_NAME;
