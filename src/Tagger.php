@@ -30,22 +30,15 @@ class Tagger
     ) {
         if ($origin instanceof Env) {
             $this->env = $origin;
-            $lib = $this->env->lib();
+            $lib = $origin->lib();
             if (!is_array($args)) {
                 // N.B. empty string != no args
                 $tagger = $lib->mecab_new2($args);
             } else {
                 array_unshift($args, 'mecab');  // A program name as we have in argv[0].
-                $gc = [];
-                $argsList = FFI::new('char *[' . count($args) . ']');
-                $index = 0;
-                foreach ($args as $arg) {
-                    $argCharP = FfiUtil::newCString((string)$arg);
-                    $gc[] = $argCharP;
-                    $argsList[$index++] = FFI::cast('char *', FFI::addr($argCharP));
-                }
+                [$argsList, $gc] = FfiUtil::newArgs($args);
                 $tagger = $lib->mecab_new(count($args), $argsList);
-                unset($gc);
+                unset($argsList, $gc);
             }
         } else {
             if ($args !== []) {

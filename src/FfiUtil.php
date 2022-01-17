@@ -43,4 +43,22 @@ class FfiUtil
         $mem[$length] = "\0";
         return $mem;
     }
+
+    /**
+     * Create C-string pointer list from an array.
+     * @param array $args List of arguments converted to C-string
+     * @return array The result as [0]. List of elements in [1], which need to be kept for the lifetime of [0].
+     */
+    public static function newArgs(array $args): array
+    {
+        $gc = [];
+        $argsList = FFI::new('char *[' . count($args) . ']');
+        $index = 0;
+        foreach ($args as $arg) {
+            $argCharP = self::newCString((string)$arg);
+            $gc[] = $argCharP;
+            $argsList[$index++] = FFI::cast('char *', FFI::addr($argCharP));
+        }
+        return [$argsList, $gc];
+    }
 }
