@@ -109,12 +109,7 @@ class Tagger
      */
     public function getDictionaryInfo(): array
     {
-        $list = [];
         $info = $this->env->lib()->mecab_dictionary_info($this->tagger);
-        while ($info) {
-            $list[] = new DictionaryInfo($info);
-            $info = $info->next;
-        }
-        return $list;
+        return DictionaryInfo::createList($info);
     }
 }

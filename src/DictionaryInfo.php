@@ -31,6 +31,16 @@ class DictionaryInfo
         $this->version = $info->version;
     }
 
+    public static function createList(FFI\CData|\stdClass $info): array
+    {
+        $list = [];
+        while ($info) {
+            $list[] = new DictionaryInfo($info);
+            $info = $info->next;
+        }
+        return $list;
+    }
+
     public function getFileName(): string
     {
         return $this->fileName;
