@@ -32,10 +32,6 @@ function main(array $argv): void
         $mecabPath = null;
     }
 
-    $envArg = [];
-    if ($mecabPath !== null) {
-        $envArg[] = $mecabPath;
-    }
     if ($scopeName !== null) {
         if (!preg_match('/\A[\w.:-]+\z/', $scopeName)) {
             errorExit("Strange scope name was specified: $scopeName");
@@ -43,7 +39,7 @@ function main(array $argv): void
     }
 
     try {
-        $env = new Env(...$envArg);
+        $env = new Env($mecabPath);
     } catch (\FFI\Exception $e) {
         errorExit($e->getMessage());
     }
