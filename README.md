@@ -7,6 +7,7 @@ MeCab binding using FFI.
 
 BSD 2-Clause License
 
+This library contains a part of MeCab interface definitions, which is licensed under BSD 3-Clause License as stated there.
 
 ## Installation
 
@@ -23,29 +24,32 @@ On some Linux distros, there should be a pre-built package.
 ```php
 use Ranvis\MeCab;
 
-require_once(__DIR__ . '/vendor/autoload.php');
+require_once __DIR__ . '/vendor/autoload.php';
 
-$env = new MeCab\Env(); // libmecab.{so,dll} should be in your PATH
-//$env = new MeCab\Env('libmecab.so.2'); // libmecab.so.2 should be in your PATH
-//$env = new MeCab\Env('/usr/lib64/libmecab.so.2'); // or specify explicitly
-var_dump($env->getVersion());
+$mecab = new MeCab\Env(); // libmecab.{so,dll} should be in the PATH directory
+//$mecab = new MeCab\Env('libmecab.so.2'); // or libmecab.so.2 in it
+//$mecab = new MeCab\Env('/usr/lib64/libmecab.so.2'); // or specify explicitly
+var_dump($mecab->getVersion());
 
-$mecab = new MeCab\Tagger($env/*, ['--rcfile', '/path/to/mecabrc']*/);
+$tagger = $mecab->tagger();
+//$tagger = $mecab->tagger(['--rcfile', '/path/to/mecabrc']);
 
-$headNode = $mecab->parseToNode("こんにちは、世界！");
+$headNode = $tagger->parseToNode("こんにちは、世界！");
 foreach ($headNode as $node) {
-    echo $node->id() . " " . $node->surface() . "\n";
+    echo $node->surface() . ": " . $node->feature() . "\n";
 }
 ```
 
 ## Preloading Dynamic Library
 
-Loading dynamic library using script via FFI has a small overhead compared with native extension.
+Loading dynamic library using script via FFI extension has a small overhead compared with native PHP extension.
 This can be mitigated by using FFI's preload feature.
 With preloading, daemon-like SAPI such as FPM can preprocess initialization of the library and reuse it afterwards.
 
+### Preload using `ffi.preload`
+
 To make use of this, we need to generate a header file for MeCab once.
-Run bundled `gen_mecab_preloader` command with the destination (and MeCab library name/path.)
+Run bundled `gen_mecab_preloader` command with the destination (and MeCab library name/path).
 
 ```sh
 $ mkdir ffi_preload.d
@@ -54,7 +58,7 @@ Generated: ffi_preload.d/mecab.h
 ```
 
 Then set `ffi.preload` ini value to point to the file.
-(The header file may have to be regenerated when this library is largely updated.)
+(The header file may have to be regenerated in case this library is largely updated.)
 
 Now to see if it works, we use CLI to run the following script.
 Notice that `MeCab\Env` is now instantiated with `MeCab\Env::fromScope()` static method instead of `new` operator, to take advantage of preloading.
@@ -63,13 +67,41 @@ Notice that `MeCab\Env` is now instantiated with `MeCab\Env::fromScope()` static
 $ cat <<'END' > preload_test.php
 <?php
 
-require_once(__DIR__ . '/vendor/autoload.php');
+require_once __DIR__ . '/vendor/autoload.php';
 
 use Ranvis\MeCab;
 
-$env = MeCab\Env::fromScope();
-var_dump($env->getVersion());
+$mecab = MeCab\Env::fromScope();
+var_dump($mecab->getVersion());
 END
 $ php -d ffi.preload=ffi_preload.d/*.h preload_test.php
 string(5) "0.996"
 ```
+
+If your PHP is running in daemon-like style like FPM, restart the daemon process to take effect.
+
+### Preload using `opcache.preload`
+
+Note: OPcache's preloading is not supported in Windows. ([gh#4999](https://github.com/php/php-src/pull/4999))
+
+Another way of preloading is to use OPcache's one.
+OPcache also has a feature to preload classes that you use often.
+FFI can be initialized during this step as well provided that `opcache.preload_user` is not set. (Usually not.)
+
+In the PHP script specified in `opcache.preload` ini value, call `MeCab\Env::preload()` as follows:
+
+```php
+<?php // preloader.php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+\Ranvis\MeCab\Env::preload('/path/to/libmecab.so');
+```
+
+And then on the actual script, call `MeCab\Env::fromScope()` to instantiate like the former example.
+
+```sh
+$ php -d opcache.preload=preloader.php preload_test.php
+```
+
+While this looks simpler than the former way, a header file will be silently created on system's temporary directory everytime OPcache's preloading triggers; since FFI doesn't allow in-memory interface definitions for preloading as of PHP 8.1.

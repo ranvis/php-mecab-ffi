@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace Ranvis\MeCab;
 
+/**
+ * Copyright string exported to the external header file.
+ */
 const COPYRIGHT = <<<'END'
 /*
 Copyright (c) 2001-2008, Taku Kudo

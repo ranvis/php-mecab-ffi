@@ -24,6 +24,8 @@ trait TokenIssuerTrait
 
     /**
      * Free the current token.
+     *
+     * It is not essential for destructor to call this.
      */
     private function freeToken(): void
     {

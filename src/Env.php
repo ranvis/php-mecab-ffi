@@ -46,9 +46,9 @@ class Env
      * Null if it can be found on the default location.
      * @param string|null $scope A scope name to preload to.
      * Null to load to the default scope.
-     * @return self
+     * @return static A created instance.
      */
-    public static function preload(?string $libPath = null, ?string $scope = null): ?self
+    public static function preload(?string $libPath = null, ?string $scope = null): ?static
     {
         $instance = new static(false);
         $instance->libPath = $libPath ?? 'libmecab.' . PHP_SHLIB_SUFFIX;
