@@ -12,7 +12,7 @@ This library contains a part of MeCab interface definitions, which is licensed u
 ## Installation
 
 `
-composer require "ranvis/mecab:^0.2"
+composer require "ranvis/mecab:^0.3"
 `
 
 Make sure you have installed [MeCab](http://taku910.github.io/mecab/) 0.996 (or later compatible version) on your system along with the dictionary.
