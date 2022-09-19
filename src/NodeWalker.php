@@ -32,7 +32,7 @@ class NodeWalker extends NodeBase
      */
     public function toNode(): Node
     {
-        return new Node($this->node, $this->token, $this->factory);
+        return $this->factory->create($this->node, $this->token);
     }
 
     protected function traverseNode(string $name): ?self
