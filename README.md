@@ -16,7 +16,7 @@ composer require "ranvis/mecab:^0.3"
 `
 
 Make sure you have installed [MeCab](http://taku910.github.io/mecab/) 0.996 (or later compatible version) on your system along with the dictionary.
-On some Linux distros, there should be a pre-built package.
+On Windows and some Linux distros, there should be a pre-built package.
 
 
 ## Example Usage
@@ -34,7 +34,7 @@ var_dump($mecab->getVersion());
 $tagger = $mecab->tagger();
 //$tagger = $mecab->tagger(['--rcfile', '/path/to/mecabrc']);
 
-$headNode = $tagger->parseToNode("こんにちは、世界！");
+$headNode = $tagger->parseToNode("バナナはおやつに入りますか？");
 foreach ($headNode as $node) {
     echo $node->surface() . ": " . $node->feature() . "\n";
 }
