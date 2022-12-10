@@ -21,6 +21,8 @@ class TokenValidatorTraitTest extends TestCase
         $impl = new class {
             use CallTrait;
             use TokenValidatorTrait;
+
+            public $token;
         };
         $token = new Token();
         $tokenRef = \WeakReference::create($token);
