@@ -12,7 +12,9 @@ use FFI;
 
 /**
  * A proxy node that changes the node structure it points to on traverse,
- * thus the overhead is smaller than Node.
+ * thus the overhead is smaller than regular Node.
+ *
+ * Use Node::getWalker() to instantiate indirectly.
  */
 class NodeWalker extends NodeBase
 {
