@@ -86,7 +86,8 @@ Note: OPcache's preloading is not supported in Windows. ([gh#4999](https://githu
 
 Another way of preloading is to use OPcache's one.
 OPcache also has a feature to preload classes that you use often.
-FFI can be initialized during this step as well provided that `opcache.preload_user` is not set. (Usually not.)
+FFI can be initialized during this step as well, provided that `opcache.preload_user` is not set, or set as the current system user
+on PHP 8.3 and later. (Usually it is not set.)
 
 In the PHP script specified in `opcache.preload` ini value, call `MeCab\Env::preload()` as follows:
 

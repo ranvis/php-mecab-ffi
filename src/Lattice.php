@@ -106,7 +106,7 @@ class Lattice
     {
         $this->changeToken();
         $this->factory = new NodeFactory();
-        $this->gc["\0sentence"] = $buf = FfiUtil::newBuffer($str);
+        $this->gc["\0sentence"] = $buf = FfiUtil::newBuffer($str, $this->env->lib());
         $this->env->lib()->mecab_lattice_set_sentence2($this->lattice, $buf, strlen($str));
     }
 
@@ -198,13 +198,13 @@ class Lattice
     public function getFeatureConstraint(int $position): ?string
     {
         $feature = $this->env->lib()->mecab_lattice_get_feature_constraint($this->lattice, $position);
-        return $feature !== null ? FFI::string($feature) : null;
+        return $feature !== null ? FFI::string($feature, $this->env->lib()) : null;
     }
 
     public function setFeatureConstraint(int $start, int $end, string $feature): void
     {
         if (!isset($this->gc[$feature])) {
-            $this->gc[$feature] = FfiUtil::newCString($feature);
+            $this->gc[$feature] = FfiUtil::newCString($feature, $this->env->lib());
         }
         $this->env->lib()->mecab_lattice_set_feature_constraint($this->lattice, $start, $end, $this->gc[$feature]);
     }
