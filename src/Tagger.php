@@ -16,6 +16,7 @@ class Tagger
 
     private Env $env;
     private FFI\CData $tagger;
+    private Model $model;
 
     /**
      * Instantiate Tagger.
@@ -40,15 +41,17 @@ class Tagger
                 $tagger = $lib->mecab_new(count($args), $argsList);
                 unset($argsList, $gc);
             }
-        } else {
+        } else {  // Model
             if ($args !== []) {
                 throw new \InvalidArgumentException('Args cannot be specified with Model');
             }
             $this->env = $origin->getEnv();
-            $tagger = $this->env->lib()->mecab_model_new_tagger($origin);
+            $lib = $this->env->lib();
+            $this->model = $origin; // Model needs to be kept.
+            $tagger = $lib->mecab_model_new_tagger($origin);
         }
         if ($tagger === null) {
-            $message = $this->env->lib()->mecab_strerror(null);
+            $message = $lib->mecab_strerror(null);
             if ($message === '') {  // https://github.com/taku910/mecab/issues/57
                 $message = 'Could not instantiate Tagger';
             }
@@ -61,6 +64,7 @@ class Tagger
     {
         $this->freeToken();
         $this->env->lib()->mecab_destroy($this->tagger);
+        unset($this->model); // Free up explicitly.
     }
 
     public function getLastError(): string

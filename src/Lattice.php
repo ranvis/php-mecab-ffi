@@ -14,14 +14,21 @@ class Lattice
 {
     use TokenIssuerTrait;
 
+    private Env $env;
     private FFI\CData $lattice;
     private array $gc = [];
     private NodeFactory $factory;
 
     public function __construct(
-        private Env $env,
+        Env|Model $origin,
     ) {
-        $this->lattice = $this->env->lib()->mecab_lattice_new();
+        if ($origin instanceof Env) {
+            $this->env = $origin;
+            $this->lattice = $origin->lib()->mecab_lattice_new();
+        } else {  // Model
+            $this->env = $env = $origin->getEnv();
+            $this->lattice = $env->lib()->mecab_model_new_lattice($origin->getObject());
+        }
     }
 
     public function __destruct()
