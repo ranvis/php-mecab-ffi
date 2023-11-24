@@ -35,4 +35,12 @@ class FfiUtilTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->assertNull(FfiUtil::newCString("string\0"));
     }
+
+    public function testNewArgs()
+    {
+        $input = ['foo', 'bar'];
+        [$args, $gc] = FfiUtil::newArgs($input);
+        $this->assertSame($input[0], \FFI::string($args[0]));
+        $this->assertSame($input[1], \FFI::string($args[1]));
+    }
 }
