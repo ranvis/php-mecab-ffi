@@ -29,4 +29,14 @@ class NodeFactory
         }
         return $node;
     }
+
+    public function __debugInfo(): array
+    {
+        $props = get_mangled_object_vars($this);
+        unset($props["\0" . __CLASS__ . "\0nodes"]);
+        $props = [
+            "\0" . __CLASS__ . "\0count(nodes)" => count($this->nodes),
+        ];
+        return $props;
+    }
 }

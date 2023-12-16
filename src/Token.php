@@ -35,4 +35,12 @@ class Token
     {
         $this->gc[] = $data;
     }
+
+    public function __debugInfo(): array
+    {
+        $props = get_mangled_object_vars($this);
+        unset($props["\0" . __CLASS__ . "\0gc"]);
+        $props["\0" . __CLASS__ . "\0count(gc)"] = count($this->gc);
+        return $props;
+    }
 }

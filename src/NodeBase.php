@@ -176,4 +176,14 @@ abstract class NodeBase implements NodeInterface
     {
         throw new \RuntimeException('Property is read-only');
     }
+
+    public function __debugInfo(): array
+    {
+        $props = get_mangled_object_vars($this);
+        $props["\0*\0node"] = get_class($this->node) . '#' . spl_object_id($this->node);
+        foreach (['alpha', 'beta', 'char_type', 'cost', 'feature', 'id', 'isbest', 'lcAttr', 'length', 'posid', 'prob', 'rcAttr', 'rlength', 'stat', 'surface', 'wcost'] as $name) {
+            $props[$name] = $this->$name;
+        }
+        return $props;
+    }
 }

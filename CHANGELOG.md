@@ -4,6 +4,7 @@
 ## [Unreleased]
 ### Added
 - Add `BoundaryConstraint::TOKEN_BOUNDARY` as a clearer name of `BoundaryConstraint::TOKEN`.
+- Add magic method `__debugInfo()` to `NodeFactory`, `NodeBase`, `Lattice` and `Token` and filter uninteresting details to avoid scattering or running out of memory for hidden recursions when dumping.
 ### Changed
 ### Removed
 ### Fixed
