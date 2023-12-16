@@ -198,7 +198,7 @@ class Lattice
     public function getFeatureConstraint(int $position): ?string
     {
         $feature = $this->env->lib()->mecab_lattice_get_feature_constraint($this->lattice, $position);
-        return $feature !== null ? FFI::string($feature, $this->env->lib()) : null;
+        return $feature;
     }
 
     public function setFeatureConstraint(int $start, int $end, string $feature): void

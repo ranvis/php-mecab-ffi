@@ -6,6 +6,7 @@
 ### Changed
 ### Removed
 ### Fixed
+- Fix `Lattice->getFeatureConstraint()`.
 ### Security
 ### Deprecated
 
