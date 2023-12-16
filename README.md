@@ -3,6 +3,8 @@
 MeCab binding using FFI.
 
 
+- [Changelog](CHANGELOG.md)
+
 ## License
 
 BSD 2-Clause License
@@ -17,7 +19,6 @@ composer require "ranvis/mecab:^0.3"
 
 Make sure you have installed [MeCab](http://taku910.github.io/mecab/) 0.996 (or later compatible version) on your system along with the dictionary.
 On Windows and some Linux distros, there should be a pre-built package.
-
 
 ## Example Usage
 
@@ -105,4 +106,4 @@ And then on the actual script, call `MeCab\Env::fromScope()` to instantiate like
 $ php -d opcache.preload=preloader.php preload_test.php
 ```
 
-While this looks simpler than the former way, a header file will be silently created on system's temporary directory everytime OPcache's preloading triggers; since FFI doesn't allow in-memory interface definitions for preloading as of PHP 8.1.
+While this looks simpler than the former way, a header file will be silently created on system's temporary directory everytime OPcache's preloading triggers; since FFI doesn't allow in-memory interface definitions for preloading as of PHP 8.3.
