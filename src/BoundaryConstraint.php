@@ -12,6 +12,9 @@ namespace Ranvis\MeCab;
 class BoundaryConstraint
 {
     public const ANY = 0;
-    public const TOKEN = 1;
+    public const TOKEN_BOUNDARY = 1;
     public const INSIDE_TOKEN = 2;
+
+    /** Use clearer name TOKEN_BOUNDARY instead */
+    public const TOKEN = 1;
 }

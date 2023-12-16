@@ -3,6 +3,7 @@
 [Unreleased]: https://github.com/ranvis/php-mecab-ffi/compare/v0.3.2...HEAD
 ## [Unreleased]
 ### Added
+- Add `BoundaryConstraint::TOKEN_BOUNDARY` as a clearer name of `BoundaryConstraint::TOKEN`.
 ### Changed
 ### Removed
 ### Fixed
