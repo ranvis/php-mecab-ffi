@@ -13,12 +13,16 @@ This library contains a part of MeCab interface definitions, which is licensed u
 
 ## Installation
 
+First make sure you have enabled FFI extension, which is bundled with PHP. Then execute the Composer command:
+
 `
 composer require "ranvis/mecab:^0.3"
 `
 
 Make sure you have installed [MeCab](http://taku910.github.io/mecab/) 0.996 (or later compatible version) on your system along with the dictionary.
 On Windows and some Linux distros, there should be a pre-built package.
+
+Last but not least, if you are going to use the library from non-CLI environment such as web server, `ffi.enable=true` instead of the restricted default `ffi.enable=preload` must be set in the system INI configuration used by the SAPI.
 
 ## Example Usage
 
@@ -35,7 +39,13 @@ var_dump($mecab->getVersion());
 $tagger = $mecab->tagger();
 //$tagger = $mecab->tagger(['--rcfile', '/path/to/mecabrc']);
 
-$headNode = $tagger->parseToNode("バナナはおやつに入りますか？");
+foreach ($tagger->getDictionaryInfo() as $info) {
+    $name = $info->getFileName();
+    $name = substr($name, strlen(dirname($name, 2)));
+    printf("Dictionary: %s, Version: %d, Encoding: %s\n", $name, $info->getVersion(), $info->getCharset());
+}
+
+$headNode = $tagger->parseToNode("メカブはおやつに入りますか？");
 foreach ($headNode as $node) {
     echo $node->surface() . ": " . $node->feature() . "\n";
 }
@@ -62,7 +72,7 @@ Then set `ffi.preload` ini value to point to the file.
 (The header file may have to be regenerated in case this library is largely updated.)
 
 Now to see if it works, we use CLI to run the following script.
-Notice that `MeCab\Env` is now instantiated with `MeCab\Env::fromScope()` static method instead of `new` operator, to take advantage of preloading.
+Notice that `MeCab\Env` is now instantiated with the `MeCab\Env::fromScope()` static method instead of a `new` operator, to take advantage of preloading.
 
 ```sh
 $ cat <<'END' > preload_test.php
@@ -106,4 +116,4 @@ And then on the actual script, call `MeCab\Env::fromScope()` to instantiate like
 $ php -d opcache.preload=preloader.php preload_test.php
 ```
 
-While this looks simpler than the former way, a header file will be silently created on system's temporary directory everytime OPcache's preloading triggers; since FFI doesn't allow in-memory interface definitions for preloading as of PHP 8.3.
+While this looks simpler than the former way, a header file will be silently created on the system's temporary directory everytime OPcache's preloading triggers; since FFI doesn't allow in-memory interface definitions for preloading as of PHP 8.3.
