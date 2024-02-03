@@ -1,16 +1,21 @@
 # Changelog
 
-[Unreleased]: https://github.com/ranvis/php-mecab-ffi/compare/v0.3.2...HEAD
+[Unreleased]: https://github.com/ranvis/php-mecab-ffi/compare/v0.3.3...HEAD
 ## [Unreleased]
 ### Added
-- Add `BoundaryConstraint::TOKEN_BOUNDARY` as a clearer name of `BoundaryConstraint::TOKEN`.
-- Add magic method `__debugInfo()` to `NodeFactory`, `NodeBase`, `Lattice` and `Token` and filter uninteresting details to avoid scattering or running out of memory for hidden recursions when dumping.
 ### Changed
 ### Removed
 ### Fixed
-- Fix `Lattice->getFeatureConstraint()`.
 ### Security
 ### Deprecated
+
+[0.3.3]: https://github.com/ranvis/php-mecab-ffi/compare/v0.3.2..v0.3.3
+## [0.3.3] - 2024-02-03
+### Added
+- Add `BoundaryConstraint::TOKEN_BOUNDARY` as a clearer name of `BoundaryConstraint::TOKEN`.
+- Add magic method `__debugInfo()` to `NodeFactory`, `NodeBase`, `Lattice` and `Token` and filter uninteresting details to avoid scattering or running out of memory for hidden recursions when dumping.
+### Fixed
+- Fix `Lattice->getFeatureConstraint()`.
 
 [0.3.2]: https://github.com/ranvis/php-mecab-ffi/compare/v0.3.1..v0.3.2
 ## [0.3.2] - 2023-11-24
