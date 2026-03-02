@@ -9,7 +9,7 @@
 ### Security
 ### Deprecated
 
-[0.3.3]: https://github.com/ranvis/php-mecab-ffi/compare/v0.3.2..v0.3.3
+[0.3.3]: https://github.com/ranvis/php-mecab-ffi/compare/v0.3.2...v0.3.3
 ## [0.3.3] - 2024-02-03
 ### Added
 - Add `BoundaryConstraint::TOKEN_BOUNDARY` as a clearer name of `BoundaryConstraint::TOKEN`.
@@ -17,7 +17,7 @@
 ### Fixed
 - Fix `Lattice->getFeatureConstraint()`.
 
-[0.3.2]: https://github.com/ranvis/php-mecab-ffi/compare/v0.3.1..v0.3.2
+[0.3.2]: https://github.com/ranvis/php-mecab-ffi/compare/v0.3.1...v0.3.2
 ## [0.3.2] - 2023-11-24
 ### Added
 - Add `Lattice` instantiation with `Model`.
@@ -25,12 +25,12 @@
 - Fix PHP 8.3 deprecation notices regarding `FFI`. (php-src@4acf008)
 - Fix `Tagger` instantiation with `Model`.
 
-[0.3.1]: https://github.com/ranvis/php-mecab-ffi/compare/v0.3.0..v0.3.1
+[0.3.1]: https://github.com/ranvis/php-mecab-ffi/compare/v0.3.0...v0.3.1
 ## [0.3.1] - 2022-12-10
 ### Fixed
 - Fix `NodeWalker->toNode()` returning a new node for every call.
 
-[0.3.0]: https://github.com/ranvis/php-mecab-ffi/compare/v0.2.2..v0.3.0
+[0.3.0]: https://github.com/ranvis/php-mecab-ffi/compare/v0.2.2...v0.3.0
 ## [0.3.0] - 2022-03-19
 ### Added
 - Add `Env->tagger()`, `Env->model()`, `Env->lattice()`.
@@ -51,7 +51,7 @@
 - Fix `Lattice->getBosNode()` and `Lattice->getEosNode()` not working.
 - Fix some of issues when using `Lattice`.
 
-[0.2.2]: https://github.com/ranvis/php-mecab-ffi/compare/v0.2.1..v0.2.2
+[0.2.2]: https://github.com/ranvis/php-mecab-ffi/compare/v0.2.1...v0.2.2
 ## [0.2.2] - 2022-01-13
 ### Added
 - Allow `null` as the default shlib name.
@@ -59,7 +59,7 @@
 - Fix `Tagger` constructor with empty argument.
 - Fix returning value of `Node->features()` and type of `Node->prob()`.
 
-[0.2.1]: https://github.com/ranvis/php-mecab-ffi/compare/v0.2.0..v0.2.1
+[0.2.1]: https://github.com/ranvis/php-mecab-ffi/compare/v0.2.0...v0.2.1
 ## [0.2.1] - 2020-12-19
 ### Added
 - Add `Node->features()`, which is a better alternative to `Node->feature()`.
@@ -68,12 +68,12 @@
 ### Fixed
 - Optimize for OPcache.
 
-[0.2.0]: https://github.com/ranvis/php-mecab-ffi/compare/v0.1.1..v0.2.0
+[0.2.0]: https://github.com/ranvis/php-mecab-ffi/compare/v0.1.1...v0.2.0
 ## [0.2.0] - 2020-12-15
 ### Changed
 - Rename `Node->wordCost()` to `Node->wCost()`.
 
-[0.1.1]: https://github.com/ranvis/php-mecab-ffi/compare/v0.1.0..v0.1.1
+[0.1.1]: https://github.com/ranvis/php-mecab-ffi/compare/v0.1.0...v0.1.1
 ## [0.1.1] - 2020-12-13
 ### Added
 - Add preloader.

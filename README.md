@@ -22,7 +22,7 @@ composer require "ranvis/mecab:^0.3"
 Make sure you have installed [MeCab](http://taku910.github.io/mecab/) 0.996 (or later compatible version) on your system along with the dictionary.
 On Windows and some Linux distros, there should be a pre-built package.
 
-Last but not least, if you are going to use the library from non-CLI environment such as web server, `ffi.enable=true` instead of the restricted default `ffi.enable=preload` must be set in the system INI configuration used by the SAPI.
+Last but not least, if you are going to use the library from a non-CLI environment such as a web server, `ffi.enable=true` instead of the restricted default `ffi.enable=preload` must be set in the system INI configuration used by the SAPI.
 
 ## Example Usage
 
@@ -53,7 +53,7 @@ foreach ($headNode as $node) {
 
 ## Preloading Dynamic Library
 
-Loading dynamic library using script via FFI extension has a small overhead compared with native PHP extension.
+Using scripts and FFI to load libraries incurs a small overhead compared to native PHP extensions.
 This can be mitigated by using FFI's preload feature.
 With preloading, daemon-like SAPI such as FPM can preprocess initialization of the library and reuse it afterwards.
 
@@ -89,7 +89,7 @@ $ php -d ffi.preload=ffi_preload.d/*.h preload_test.php
 string(5) "0.996"
 ```
 
-If your PHP is running in daemon-like style like FPM, restart the daemon process to take effect.
+If your PHP is running in a daemon-like style like FPM, restart the daemon process to take effect.
 
 ### Preload using `opcache.preload`
 
@@ -110,7 +110,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 \Ranvis\MeCab\Env::preload('/path/to/libmecab.so');
 ```
 
-And then on the actual script, call `MeCab\Env::fromScope()` to instantiate like the former example.
+And then in the actual script, call `MeCab\Env::fromScope()` to instantiate like the former example.
 
 ```sh
 $ php -d opcache.preload=preloader.php preload_test.php
